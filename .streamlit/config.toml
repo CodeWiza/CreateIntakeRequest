@@ -1,0 +1,17 @@
+[server]
+runOnSave = true
+headlessBrowserView = true
+
+[theme]
+primaryColor="#17072b"
+backgroundColor="#fffcff"
+secondaryBackgroundColor="#e8e5e8"
+textColor="#262730"
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
+
+[hiddenImportingPages]
+# Add the names of the pages you want to hide from the sidebar here
+importingPages = ["1_Create_Intake_Request.py", "2_Track Intake Request","3_Supplier Discovery", "4_Price Benchmarking"]

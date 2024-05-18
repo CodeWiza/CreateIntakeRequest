@@ -6,5 +6,3 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("Login Page")
-st.sidebar.success("Login first to continue")
