@@ -1,3 +1,4 @@
 streamlit==1.33.0
 streamlit_elements==0.1.0
 extra_streamlit_components==0.1.71
+streamlit-button-select==0.0.4
