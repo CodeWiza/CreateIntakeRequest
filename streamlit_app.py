@@ -6,4 +6,4 @@ st.set_page_config(
     layout="wide",
 )
 
-st.sidebar.image("https://raw.githubusercontent.com/CodeWiza/PriceBenchmarking-Dashboard/main/logo.png", use_column_width=True)
+#st.sidebar.image("https://raw.githubusercontent.com/CodeWiza/PriceBenchmarking-Dashboard/main/logo.png", use_column_width=True)
