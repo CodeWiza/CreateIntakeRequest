@@ -55,73 +55,104 @@ def display_approval_status(approval):
     """, unsafe_allow_html=True)
 
 item_prompt = st.text_input("What are you looking for?")
-if item_prompt is not None:
+if item_prompt:
     # Add confirmation buttons
     st.write("I understand it's a new purchase request, please confirm ")
-    option = st_btn_select(('Yes', "No, it's a sourcing request"))
-    #st.write(f'Selected option: {option}')
+    option = st_btn_select(('Yes', "No, it's a sourcing request"), index=1)
 
-    # Add header
-    st.header("Intake Purchase Request")
+    # Display content only if 'Yes' is selected
+    if option == 'Yes':
+        # Add header
+        st.header("Intake Purchase Request")
 
-    # Define stepper bar steps
-    steps = [
-        "Item Details",
-        "Supplier Discovery",
-        "Accounting",
-        "Approvals",
-        "Track Status"
-    ]
+        # Define stepper bar steps
+        steps = [
+            "Item Details",
+            "Supplier Discovery",
+            "Accounting",
+            "Approvals",
+            "Track Status"
+        ]
 
-    # Add stepper bar
-    selected_step = stx.stepper_bar(steps=steps)
+        # Add stepper bar
+        selected_step = stx.stepper_bar(steps=steps)
 
-    # Render content based on selected step
-    if selected_step == 0:
-        with st.container():
-            st.subheader("Item Details")
-            item_description = st.text_input("Item Description")
-            requester = st.text_input("Requester")
-            category = st.text_input("Category")
-            department = st.text_input("Department")
-            ship_to_address = st.text_input("Ship to address")
-            more_info = st.text_area("More info about the supplier")
-    elif selected_step == 1:
-        with st.container():
-            st.subheader("Supplier Discovery")
-            recommended_supplier = st.text_input("Recommended Supplier")
-            supplier_score = st.text_input("Supplier Score / Previous Purchases")
-            delivery_date = st.date_input("Delivery Date")
-    elif selected_step == 2:
-        with st.container():
-            st.subheader("Accounting")
-            cost_center = st.text_input("Cost Center")
-            gl_account = st.text_input("GL Account")
-    elif selected_step == 3:
-        with st.container():
-            st.subheader("Approvals")
+        # Render content based on selected step
+        if selected_step == 0:
+            with st.container():
+                st.subheader("Item Details")
+                product_ID = st.text_input("Product ID")
+                product_name = st.text_input("Product Name")
+                requester = st.text_input("Requester")
+                category = st.text_input("Category")
+                department = st.text_input("Department")
+                ship_to_address = st.text_input("Ship to address")
+                more_info = st.text_area("Quantity")
+        elif selected_step == 1:
+            with st.container():
+                st.subheader("Buying Channel")
+                st.caption("Recommended Supplier")
+                supplier_data = {
+                    "Source": ["Catalog Name", "Contract", "Preferred"],
+                    "Supplier": [8, 6, 7],
+                    "Document ID": ["Catalog ID", "Contract ID", ""],
+                    "Item name": ["", "", ""],
+                    "Price": ["", "", ""],
+                    "SKU": ["", "", ""],
+                    "Lead time": ["", "", ""]
+                }
+                st.table(supplier_data)
 
-            for approval in st.session_state.approvals:
-                display_approval_status(approval)
+                st.caption("Delivery Date")
+                choose_date = st.date_input("Choose Date")
+                st.write("Supplier Score")
+                score_data = {
+                    "Parameter": ["Ontime", "Quality", "Price"],
+                    "Quality": [8, 6, 7],
+                    "Price": ["", "", ""],
+                    "Finance": ["", "", ""],
+                    "Score updated on": ["", "", ""]
+                }
+                st.table(score_data)
 
-            # Add interactivity to update approval statuses
-            st.subheader("Update Approval Status")
-            selected_name = st.selectbox("Select Name", [approval["name"] for approval in st.session_state.approvals])
-            selected_approval = next((approval for approval in st.session_state.approvals if approval["name"] == selected_name), None)
+                st.caption("Supplier News")
+                news_data = {
+                    "News": ["", "", ""],
+                    "News Summary": ["", "", ""],
+                    "News Source": ["", "", ""],
+                    "News update date": ["", "", ""]
+                }
+                st.table(news_data)
+        elif selected_step == 2:
+            with st.container():
+                st.subheader("Accounting")
+                cost_center = st.text_input("Cost Center")
+                gl_account = st.text_input("GL Account")
+        elif selected_step == 3:
+            with st.container():
+                st.subheader("Approvals")
 
-            if selected_approval:
-                current_status = selected_approval["status"]
-                new_status = st.selectbox("Select New Status", [PENDING, IN_REVIEW, APPROVED], index=[PENDING, IN_REVIEW, APPROVED].index(current_status))
+                for approval in st.session_state.approvals:
+                    display_approval_status(approval)
 
-                if new_status != current_status:
-                    selected_approval["status"] = new_status
-                    st.success(f"Updated {selected_name}'s status to {new_status}")
-    elif selected_step == 4:
-        with st.container():
-            st.subheader("Track Status")
-            # Add any relevant status tracking components here
+                # Add interactivity to update approval statuses
+                st.subheader("Update Approval Status")
+                selected_name = st.selectbox("Select Name", [approval["name"] for approval in st.session_state.approvals])
+                selected_approval = next((approval for approval in st.session_state.approvals if approval["name"] == selected_name), None)
 
-    if st.button('Next'):
-        selected_step += 1
-    if st.button('Previous'):
-        selected_step -= 1
+                if selected_approval:
+                    current_status = selected_approval["status"]
+                    new_status = st.selectbox("Select New Status", [PENDING, IN_REVIEW, APPROVED], index=[PENDING, IN_REVIEW, APPROVED].index(current_status))
+
+                    if new_status != current_status:
+                        selected_approval["status"] = new_status
+                        st.success(f"Updated {selected_name}'s status to {new_status}")
+        elif selected_step == 4:
+            with st.container():
+                st.subheader("Track Status")
+                # Add any relevant status tracking components here
+
+        if st.button('Next'):
+            selected_step += 1
+        if st.button('Previous'):
+            selected_step -= 1
