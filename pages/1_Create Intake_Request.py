@@ -1,10 +1,16 @@
 import streamlit as st
 import extra_streamlit_components as stx
 from st_btn_select import st_btn_select
+from utils import inject_sidebar_logo
 
 
 # Set page configuration
 st.set_page_config(page_title="Purchase Request System", layout="wide")
+
+
+logo_path = "logo.png"
+inject_sidebar_logo(logo_path)
+
 
 # Define the approval statuses
 PENDING = "Pending"
